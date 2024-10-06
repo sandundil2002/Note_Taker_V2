@@ -1,7 +1,6 @@
-package lk.ijse.note_taker_v2.dto.impl;
+package lk.ijse.note_taker_v2.entity;
 
-import lk.ijse.note_taker_v2.customObj.UserResponse;
-import lk.ijse.note_taker_v2.dto.SuperDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +10,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserDTO implements SuperDTO, UserResponse {
+@Entity
+@Table(name = "users")
+public class UserEntity implements SuperEntity{
+    @Id
     private String userId;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String password;
+    @Column(columnDefinition = "LONGTEXT")
     private String profilePic;
-    private List<NoteDTO> notes;
+    @OneToMany(mappedBy = "user")
+    private List<NoteEntity> notes;
 }
