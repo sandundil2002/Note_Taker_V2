@@ -11,6 +11,7 @@ import lk.ijse.note_taker_v2.util.AppUtil;
 import lk.ijse.note_taker_v2.util.MappingUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +88,11 @@ public class UserServiceIMPL implements UserService {
         List<UserEntity> users = userDAO.findAll();
         System.out.println(users);
         return mappingUtil.userConvertToDTOList(users);
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return email -> userDAO.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
 }
