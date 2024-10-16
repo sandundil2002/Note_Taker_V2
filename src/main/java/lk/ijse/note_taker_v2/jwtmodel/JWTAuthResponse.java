@@ -1,12 +1,14 @@
 package lk.ijse.note_taker_v2.jwtmodel;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class JWTResponse {
+@Builder
+public class JWTAuthResponse {
     private String token;
 }

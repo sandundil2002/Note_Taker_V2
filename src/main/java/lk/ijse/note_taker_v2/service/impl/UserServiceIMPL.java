@@ -5,6 +5,7 @@ import lk.ijse.note_taker_v2.customObj.UserResponse;
 import lk.ijse.note_taker_v2.dao.UserDAO;
 import lk.ijse.note_taker_v2.dto.impl.UserDTO;
 import lk.ijse.note_taker_v2.entity.UserEntity;
+import lk.ijse.note_taker_v2.exception.DataPersistFailedException;
 import lk.ijse.note_taker_v2.exception.UserNotFoundException;
 import lk.ijse.note_taker_v2.service.UserService;
 import lk.ijse.note_taker_v2.util.AppUtil;
@@ -32,13 +33,12 @@ public class UserServiceIMPL implements UserService {
     @Override
     public String saveUser(UserDTO userDTO) {
         userDTO.setUserId(AppUtil.generateUserID());
-        UserEntity saved = userDAO.save(mappingUtil.userConvertToEntity(userDTO));
-        if(saved != null && saved.getUserId() != null ) {
+        UserEntity savedUser = userDAO.save(mappingUtil.userConvertToEntity(userDTO));
+        if(savedUser == null ) {
+            throw new DataPersistFailedException("Cannot data saved");
+        } else {
             System.out.println("User saved successfully");
-            return "User saved successfully";
-        }else {
-            System.out.println("Save failed");
-            return "Save failed";
+            return savedUser.getUserId();
         }
     }
 
@@ -74,7 +74,7 @@ public class UserServiceIMPL implements UserService {
     @Override
     public UserResponse getUserById(String id) {
         if(userDAO.existsById(id)){
-            UserEntity userEntityByUserId = userDAO.getUserEntityByUserId(id);
+            UserEntity userEntityByUserId = userDAO.getReferenceById(id);
             System.out.println(userEntityByUserId);
             return mappingUtil.userConvertToDTO(userEntityByUserId);
         }else {

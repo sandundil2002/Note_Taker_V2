@@ -42,7 +42,7 @@ public class JWTServiceIMPL implements JWTService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
 
     }
-    // actual process
+
     private <T> T extractClaim(String token, Function<Claims,T> claimResolve) {
         final Claims claims = getAllClaims(token);
         return claimResolve.apply(claims);
